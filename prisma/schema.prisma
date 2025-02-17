@@ -16,13 +16,14 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String    @id @default(uuid())
+  email     String    @unique
   password  String
   role      Role
   profile   Profile?
-  createdAt DateTime @map("created_at") @db.Timestamp()
-  updatedAt DateTime @map("updated_at") @db.Timestamp()
+  products  Product[]
+  createdAt DateTime  @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @map("updated_at") @db.Timestamp()
 
   @@map("users")
 }
@@ -36,4 +37,41 @@ model Profile {
   phoneNumber String? @map("phone_number")
 
   @@map("profiles")
+}
+
+enum ProductType {
+  SIMPLE
+  COMPOSITE
+}
+
+model Product {
+  id          String      @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  quantity    Int
+  userId      String
+  createdBy   User        @relation(fields: [userId], references: [id])
+  type        ProductType
+  components  Component[]
+  usedIn      Component[] @relation("ProductToComponent")
+
+  createdAt DateTime @map("created_at") @db.Timestamp()
+  updatedAt DateTime @map("updated_at") @db.Timestamp()
+
+  @@map("products")
+}
+
+model Component {
+  id          String   @id @default(uuid())
+  quantity    Int
+  compositeId String
+  composite   Product  @relation(fields: [compositeId], references: [id])
+  productId   String
+  product     Product  @relation("ProductToComponent", fields: [productId], references: [id])
+  createdAt   DateTime @map("created_at") @db.Timestamp()
+  updatedAt   DateTime @map("updated_at") @db.Timestamp()
+
+  @@unique([compositeId, productId])
+  @@map("components")
 }
