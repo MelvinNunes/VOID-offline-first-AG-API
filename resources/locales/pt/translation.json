@@ -1,0 +1,23 @@
+{
+  "health": "O servidor esta saudavel!",
+  "invalid_id": "Inseriu um ID invalido!",
+  "invalid_param": "Inseriu um parametro invalido!",
+  "internal_server_error": "Ocorreu um erro interno no servidor. Por favor tente mais tarde",
+  "auth": {
+    "success": "Login efectuado com sucesso!",
+    "invalid_credentials": "As credenciais sao invalidas",
+    "not_enough_access": "Apenas um ADMIN pode realizar essa accao!",
+    "token_not_found": "Por favor insira o token de autenticacão!",
+    "token_not_valid": "O token inserido é invalido!"
+  },
+  "user": {
+    "created": "O úsuario foi criado com sucesso!",
+    "already_exists": "O usúario inserido já existe!",
+    "already_exists_with_email": "O usúario com o email inserido já existe na nossa aplicação.",
+    "not_found": "O usúario não foi encontrado"
+  },
+  "profile": {
+    "success": "O seu perfil",
+    "not_found": "O perfil não foi encontrado!"
+  }
+}
