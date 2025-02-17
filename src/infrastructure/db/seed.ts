@@ -12,7 +12,7 @@ async function adminSeeder() {
     create: {
       email: process.env.ADMIN_USERNAME,
       password: hashedPassword,
-      role: Role.ADMIN,
+      role: Role.MANAGER,
       createdAt: new Date(),
       updatedAt: new Date(),
     },
