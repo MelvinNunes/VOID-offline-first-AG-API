@@ -3,6 +3,7 @@ import { logger } from "../../../src/infrastructure/config/logger";
 import {
   BadRequestCreatingProductException,
   CannotHaveActionInProductException,
+  ProductNotFoundException,
 } from "../../../src/infrastructure/exceptions/product/productExceptions";
 import { AuthUser } from "../../../src/infrastructure/types";
 import {
@@ -10,8 +11,9 @@ import {
   ProductRequestData,
 } from "../../../src/interfaces/dtos/productDTO";
 import { UserServices } from "./userService";
-import { $Enums, ProductType } from "@prisma/client";
+import { $Enums, Product, ProductType } from "@prisma/client";
 import { ProductRepository } from "../../../src/domain/repository/productRepository";
+import ComponentService from "./componentService";
 
 export default class ProductService {
   static async createProduct(createdBy: AuthUser, data: ProductRequestData) {
@@ -40,11 +42,26 @@ export default class ProductService {
       updatedAt: new Date(),
     };
 
+    var createdProduct: Product;
+
     try {
-      await ProductRepository.create(product);
+      createdProduct = await ProductRepository.create(product);
     } catch (err) {
       logger.error(`Error creating the main product, err: ${err}`);
       throw new InternalServerError();
+    }
+
+    if (productType === ProductType.COMPOSITE) {
+      ComponentService.createManyComponents(createdProduct.id, data.components)
+        .then(() => {
+          logger.info(`Sucessfully created all components in the product! `);
+        })
+        .catch((err) => {
+          logger.error(
+            `Error saving components for the product with data: ${data}`
+          );
+          logger.error(`Error saving was: ${err}`);
+        });
     }
   }
 
@@ -60,6 +77,19 @@ export default class ProductService {
     const isSimpleProductInfoAvailable = data.price && data.quantity;
     if (!data.components && !isSimpleProductInfoAvailable)
       throw new BadRequestCreatingProductException();
+
+    if (data.components && data.components.length > 0) {
+      await Promise.all(
+        data.components.map(async (component) => {
+          const exists = await this.existsById(component.productId);
+          if (!exists) {
+            throw new ProductNotFoundException(
+              `The product with the given id: ${component.productId}, in components, was not found!`
+            );
+          }
+        })
+      );
+    }
   }
 
   private static async calculatePrice(
@@ -80,5 +110,9 @@ export default class ProductService {
       return data.quantity;
     }
     return null; // to be calc
+  }
+
+  private static async existsById(id: string): Promise<boolean> {
+    return await ProductRepository.existsById(id);
   }
 }
