@@ -7,7 +7,7 @@ import AuthController from "../../interfaces/controllers/authController";
 import {
   LoginRequest,
   RegistrationRequest,
-} from "../../interfaces/request/authentication";
+} from "../../interfaces/request/authenticationRequest";
 import { validateData } from "../middlewares/requestValidationMiddleware";
 
 const router = express.Router();
