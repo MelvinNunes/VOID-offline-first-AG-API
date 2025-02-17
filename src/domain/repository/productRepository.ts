@@ -6,8 +6,16 @@ const prisma = new PrismaClient();
 
 export class ProductRepository {
   static async create(data: ProductCreationData): Promise<Product> {
-    return await prisma.product.create({
-      data: data,
+    return await prisma.product.upsert({
+      where: {
+        id: data.id,
+      },
+      update: {
+        ...data,
+      },
+      create: {
+        ...data,
+      },
     });
   }
 

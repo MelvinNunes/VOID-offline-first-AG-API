@@ -33,6 +33,7 @@ export default class ProductService {
     const quantity = await this.calculateQuantity(productType, data);
 
     const product: ProductCreationData = {
+      id: data.id,
       name: data.name,
       description: data.description,
       price: price,

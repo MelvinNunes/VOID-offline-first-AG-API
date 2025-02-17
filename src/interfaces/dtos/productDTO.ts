@@ -1,6 +1,7 @@
 import { $Enums } from "@prisma/client";
 
 export interface ProductCreationData {
+  id: string;
   name: string;
   description: string;
   price: number;
