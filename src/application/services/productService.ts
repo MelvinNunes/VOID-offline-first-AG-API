@@ -14,6 +14,7 @@ import { UserServices } from "./userService";
 import { $Enums, Product, ProductType } from "@prisma/client";
 import { ProductRepository } from "../../../src/domain/repository/productRepository";
 import ComponentService from "./componentService";
+import { ProductModel } from "../../../src/domain/models/product";
 
 export default class ProductService {
   static async createProduct(createdBy: AuthUser, data: ProductRequestData) {
@@ -65,6 +66,59 @@ export default class ProductService {
     }
   }
 
+  static async getAllProducts(
+    authUser: AuthUser,
+    start: number,
+    limit: number
+  ) {
+    // const onlineUser = await UserServices.getCurrentUser(authUser);
+  }
+
+  static async getProductDetails(
+    authUser: AuthUser,
+    productId: string
+  ): Promise<ProductModel> {
+    const onlineUser = await UserServices.getCurrentUser(authUser);
+    const product = await ProductRepository.findById(productId);
+
+    if (!product) {
+      throw new ProductNotFoundException(
+        `The product with the id: ${productId} was not found in our services!`
+      );
+    }
+
+    if (!onlineUser.canViewProduct(product.type)) {
+      throw new CannotHaveActionInProductException(
+        `You dont have enought permission to view this type of product: ${product.type}`
+      );
+    }
+
+    return product;
+  }
+
+  static async deleteProduct(authUser: AuthUser, productId: string) {
+    const onlineUser = await UserServices.getCurrentUser(authUser);
+    if (!onlineUser.canDeleteProduct()) {
+      throw new CannotHaveActionInProductException(
+        `You dont have enought permission to delete products!`
+      );
+    }
+
+    const product = await ProductRepository.findById(productId);
+    if (!product) {
+      throw new ProductNotFoundException(
+        `The product with the id: ${productId} was not found in our services!`
+      );
+    }
+
+    try {
+      await ProductRepository.deleteById(productId);
+    } catch (err) {
+      logger.error(``);
+      throw new InternalServerError();
+    }
+  }
+
   private static async getProductTypeCreating(
     data: ProductRequestData
   ): Promise<$Enums.ProductType> {
@@ -99,6 +153,9 @@ export default class ProductService {
     if (productType === ProductType.SIMPLE) {
       return data.price;
     }
+    // return data.components.map((componet) => {
+    //   return componet.quantity * 0;
+    // })
     return 0; // to be calc
   }
 
@@ -109,7 +166,7 @@ export default class ProductService {
     if (productType === ProductType.SIMPLE) {
       return data.quantity;
     }
-    return null; // to be calc
+    return 0; // to be calc
   }
 
   private static async existsById(id: string): Promise<boolean> {
