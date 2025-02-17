@@ -187,66 +187,6 @@
         "summary": "Get all users from the api (ADMIN).",
         "tags": ["Users"]
       }
-    },
-    "/users/{userId}": {
-      "get": {
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "String ID of the user to get"
-          }
-        ],
-        "description": "Get specific user using his ID.",
-        "responses": {
-          "200": {
-            "description": "Successfully retrivied all users"
-          },
-          "500": {
-            "description": "Internal Error"
-          }
-        },
-        "summary": "Get specific user using his ID.",
-        "tags": ["Users"]
-      },
-      "delete": {
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "String ID of the user id"
-          }
-        ],
-        "description": "Delete specific user from the api.",
-        "responses": {
-          "200": {
-            "description": "Successfully retrivied all users"
-          },
-          "500": {
-            "description": "Internal Error"
-          }
-        },
-        "summary": "Delete specific user from the api.",
-        "tags": ["Users"]
-      }
     }
   },
   "servers": [
