@@ -7,7 +7,7 @@
     "build": "tsc --project ./",
     "generate": "npx prisma generate",
     "migrate": "npx prisma migrate dev",
-    "dev": "yarn generate && yarn migrate && nodemon src/server.ts",
+    "dev": "yarn generate && yarn migrate && ts-node src/infrastructure/db/seed.ts && nodemon src/server.ts",
     "test": "jest",
     "prod": "node dist/server.js"
   },

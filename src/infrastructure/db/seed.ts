@@ -17,6 +17,7 @@ async function adminSeeder() {
       updatedAt: new Date(),
     },
   });
+
   console.log("Admin User seeded successfully!");
 }
 
