@@ -6,7 +6,6 @@ export const LoginRequest = z.object({
 });
 
 export const Role = z.enum(["MANAGER", "USER"]);
-export type Role = z.infer<typeof Role>;
 
 export const RegistrationRequest = z.object({
   email: z.string().email(),

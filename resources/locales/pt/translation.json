@@ -11,6 +11,7 @@
     "token_not_valid": "O token inserido é invalido!"
   },
   "user": {
+    "all": "Todos os usuarios",
     "created": "O úsuario foi criado com sucesso!",
     "already_exists": "O usúario inserido já existe!",
     "already_exists_with_email": "O usúario com o email inserido já existe na nossa aplicação.",
@@ -19,5 +20,8 @@
   "profile": {
     "success": "O seu perfil",
     "not_found": "O perfil não foi encontrado!"
+  },
+  "product": {
+    "created": "O seu producto foi criado com sucesso, espere pela mensage de sucesso!"
   }
 }

@@ -1,12 +1,16 @@
-import { NextFunction, Response, Request } from "express";
+import { NextFunction, Response } from "express";
 import { UserServices } from "../../application/services/userService";
-import { RequestWithUser } from "../../infrastructure/types/index";
+import {
+  RequestWithUser,
+  RequestWTranslation,
+} from "../../infrastructure/types/index";
 import { ApiResponse } from "../response/apiResponse";
 import { UserVM } from "../response/user";
 import { UserModel } from "../../../src/domain/models/user";
+import { StatusCodes } from "http-status-codes";
 
 export default class UserController {
-  static async getAllUsers(req: Request, res: Response) {
+  static async getAllUsers(req: RequestWTranslation, res: Response) {
     const start = Number.isNaN(Number(req.query.start))
       ? 0
       : Number(req.query.start);
@@ -16,8 +20,8 @@ export default class UserController {
 
     const data = await UserServices.getAllUsers(start, limit);
     return res
-      .status(200)
-      .json(new ApiResponse<UserModel[]>("All users", data));
+      .status(StatusCodes.OK)
+      .json(new ApiResponse<UserModel[]>(req.t("user.all"), data));
   }
 
   static async getOnlineUser(
@@ -30,7 +34,7 @@ export default class UserController {
     try {
       const userVM = await UserServices.getOnlineUser(authUser);
       return res
-        .status(200)
+        .status(StatusCodes.OK)
         .json(new ApiResponse<UserVM>(req.t("profile.success"), userVM));
     } catch (err) {
       next(err);

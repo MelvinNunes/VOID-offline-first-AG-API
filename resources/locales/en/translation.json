@@ -10,6 +10,7 @@
     "token_not_valid": "The inserted auth token is invalid!"
   },
   "user": {
+    "all": "All users",
     "created": "User created successfully!",
     "already_exists": "User already exists!",
     "already_exists_with_email": "User with given email already exists! If its your account, please login.",
@@ -18,5 +19,8 @@
   "profile": {
     "success": "Your profile",
     "not_found": "Profile was not found!"
+  },
+  "product": {
+    "created": "Your product is being created! Wait for the successfull notification"
   }
 }

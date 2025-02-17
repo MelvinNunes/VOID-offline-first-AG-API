@@ -9,6 +9,7 @@ import {
 import { Role } from "@prisma/client";
 import { Login, Register } from "../dtos/authDTO";
 import { ApiResponseWithToken } from "../response/apiResponse";
+import { StatusCodes } from "http-status-codes";
 
 export default class AuthController {
   static async login(
@@ -20,7 +21,7 @@ export default class AuthController {
     try {
       const token = await AuthService.login(data);
       return res
-        .status(200)
+        .status(StatusCodes.OK)
         .json(
           new ApiResponseWithToken<void>(token, req.t("auth.success"), null)
         );
@@ -41,7 +42,7 @@ export default class AuthController {
       const token = AuthService.generateAccessToken(data.email);
 
       return res
-        .status(201)
+        .status(StatusCodes.CREATED)
         .json(
           new ApiResponseWithToken<void>(token, req.t("user.created"), null)
         );
