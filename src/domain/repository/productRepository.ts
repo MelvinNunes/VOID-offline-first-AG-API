@@ -30,6 +30,9 @@ export class ProductRepository {
           in: types,
         },
       },
+      include: {
+        components: true,
+      },
       take: limit,
       skip: start,
     });
@@ -59,8 +62,11 @@ export class ProductRepository {
       where: {
         id: id,
       },
+      include: {
+        components: true,
+      },
     });
-    return product ? new ProductModel(product) : null;
+    return product ? new ProductModel(product, product.components) : null;
   }
 
   static async deleteById(id: string): Promise<void> {
