@@ -70,11 +70,15 @@ export default class ProductService {
     if (productType === ProductType.COMPOSITE) {
       ComponentService.createManyComponents(createdProduct.id, data.components)
         .then(() => {
-          logger.info(`Sucessfully created all components in the product! `);
+          logger.info(
+            `Sucessfully created all components in the product: ${createdProduct.id}! `
+          );
         })
         .catch((err) => {
           logger.error(
-            `Error saving components for the product with data: ${data}`
+            `Error saving components for the product with id: ${
+              createdProduct.id
+            } and with data: ${JSON.stringify(data)}`
           );
           logger.error(`Error saving was: ${err}`);
         });
@@ -201,7 +205,30 @@ export default class ProductService {
       return data.quantity;
     }
 
-    return 0; // to be calc
+    if (
+      !componentProducts ||
+      !data.components ||
+      data.components.length === 0
+    ) {
+      return 0;
+    }
+
+    const productQuantityMap = new Map(
+      componentProducts.map((product) => [product.id, product.quantity])
+    );
+
+    const possibleQuantities = data.components.map((component) => {
+      const availableQuantity =
+        productQuantityMap.get(component.productId) || 0;
+      const requiredQuantity = component.quantity;
+
+      if (requiredQuantity === 0) return Infinity;
+
+      return Math.floor(availableQuantity / requiredQuantity);
+    });
+
+    const finiteQuantities = possibleQuantities.filter((q) => q !== Infinity);
+    return finiteQuantities.length > 0 ? Math.min(...finiteQuantities) : 0;
   }
 
   private static async existsById(id: string): Promise<boolean> {
