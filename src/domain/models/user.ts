@@ -16,4 +16,32 @@ export class UserModel implements User {
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
   }
+
+  canCreateProduct(productType: $Enums.ProductType) {
+    if (this.role === $Enums.Role.MANAGER) {
+      return true;
+    }
+    return (
+      this.role === $Enums.Role.USER &&
+      productType === $Enums.ProductType.SIMPLE
+    );
+  }
+
+  canViewProduct(productType: $Enums.ProductType) {
+    if (this.role === $Enums.Role.MANAGER) {
+      return true;
+    }
+    return (
+      this.role === $Enums.Role.USER &&
+      productType === $Enums.ProductType.COMPOSITE
+    );
+  }
+
+  canUpdateProduct() {
+    return this.role === $Enums.Role.MANAGER;
+  }
+
+  canDeleteProduct() {
+    return this.role === $Enums.Role.MANAGER;
+  }
 }
