@@ -42,7 +42,7 @@ Check out the the package.json file for more information!
 
 # TESTING
 
-For testing purposes, i used the supertest and jest libraries, you can run `yarn test` to run all tests.
+For testing purposes, i used the supertest and jest libraries, you can run `yarn test` to run all tests. (Run the project before testing, still need to add test containers to fix this)
 
 # DEPLOY
 
