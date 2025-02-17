@@ -36,7 +36,8 @@ export default class AuthController {
   ) {
     try {
       const data: Register = req.body;
-      await UserServices.createUser(data, Role.USER);
+      const role: Role = req.body.type;
+      await UserServices.createUser(data, role);
       const token = AuthService.generateAccessToken(data.email);
 
       return res
