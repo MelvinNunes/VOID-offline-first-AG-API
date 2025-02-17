@@ -29,8 +29,22 @@ export default class ProductService {
       );
     }
 
-    const price = await this.calculatePrice(productType, data);
-    const quantity = await this.calculateQuantity(productType, data);
+    var componentProducts: Product[] = [];
+    if (data.components && data.components.length > 0) {
+      const ids = data.components.map((component) => component.productId);
+      componentProducts = await ProductRepository.allInIds(ids);
+    }
+
+    const price = await this.calculatePrice(
+      productType,
+      data,
+      componentProducts
+    );
+    const quantity = await this.calculateQuantity(
+      productType,
+      data,
+      componentProducts
+    );
 
     const product: ProductCreationData = {
       id: data.id,
@@ -158,21 +172,30 @@ export default class ProductService {
   private static async calculatePrice(
     productType: $Enums.ProductType,
     data: ProductRequestData,
-    componentProducts?: ProductModel[]
+    componentProducts?: Product[]
   ): Promise<number> {
     if (productType === ProductType.SIMPLE) {
       return data.price;
     }
-    // return data.components.map((componet) => {
-    //   return componet.quantity * 0;
-    // })
-    return 0; // to be calc
+    if (!componentProducts || !data.components) {
+      return 0;
+    }
+    const productPriceMap = new Map(
+      componentProducts.map((product) => [product.id, product.price])
+    );
+
+    const totalPrice = data.components.reduce((sum, component) => {
+      const productPrice = productPriceMap.get(component.productId) || 0;
+      return sum + component.quantity * productPrice;
+    }, 0);
+
+    return totalPrice;
   }
 
   private static async calculateQuantity(
     productType: $Enums.ProductType,
     data: ProductRequestData,
-    componentProducts?: ProductModel[]
+    componentProducts?: Product[]
   ): Promise<number> {
     if (productType === ProductType.SIMPLE) {
       return data.quantity;

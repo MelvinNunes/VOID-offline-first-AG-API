@@ -35,6 +35,16 @@ export class ProductRepository {
     });
   }
 
+  static async allInIds(ids: string[]): Promise<Product[]> {
+    return await prisma.product.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
+
   static async existsById(id: string): Promise<boolean> {
     const count = await prisma.product.count({
       where: {
