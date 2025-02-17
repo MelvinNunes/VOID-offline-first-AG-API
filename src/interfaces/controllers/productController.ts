@@ -3,12 +3,15 @@ import { RequestWithUser } from "../../../src/infrastructure/types";
 import { ApiResponse } from "../response/apiResponse";
 import { StatusCodes } from "http-status-codes";
 import ProductService from "../../../src/application/services/productService";
-import { ProductRequestData } from "../dtos/productDTO";
+import {
+  ProductCreateRequestData,
+  ProductUpdateRequestData,
+} from "../dtos/productDTO";
 import { ProductModel } from "../../../src/domain/models/product";
 
 export default class ProductController {
   static async create(req: RequestWithUser, res: Response, next: NextFunction) {
-    const data: ProductRequestData = req.body;
+    const data: ProductCreateRequestData = req.body;
     try {
       await ProductService.createProduct(req.user, data);
       return res
@@ -18,6 +21,28 @@ export default class ProductController {
             StatusCodes.CREATED,
             req.t("product.created"),
             null
+          )
+        );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async update(req: RequestWithUser, res: Response, next: NextFunction) {
+    const data: ProductUpdateRequestData = req.body;
+    try {
+      const product = await ProductService.updateProduct(
+        req.params.id,
+        req.user,
+        data
+      );
+      return res
+        .status(StatusCodes.OK)
+        .json(
+          new ApiResponse<ProductModel>(
+            StatusCodes.OK,
+            req.t("product.updated"),
+            product
           )
         );
     } catch (error) {

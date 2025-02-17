@@ -24,6 +24,7 @@
     "created": "Your product is being created! Wait for the successfull notification",
     "all": "All products",
     "details": "Details of the product",
-    "deleted": "Product successfully deleted!"
+    "deleted": "Product successfully deleted!",
+    "updated": "Updated successfully"
   }
 }

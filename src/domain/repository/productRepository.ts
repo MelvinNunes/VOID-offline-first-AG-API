@@ -1,5 +1,8 @@
 import { PrismaClient, Product, ProductType } from "@prisma/client";
-import { ProductCreationData } from "../../../src/interfaces/dtos/productDTO";
+import {
+  ProductCreationData,
+  ProductUpdateData,
+} from "../../../src/interfaces/dtos/productDTO";
 import { ProductModel } from "../models/product";
 
 const prisma = new PrismaClient();
@@ -16,6 +19,15 @@ export class ProductRepository {
       create: {
         ...data,
       },
+    });
+  }
+
+  static async update(id: string, data: ProductUpdateData): Promise<Product> {
+    return prisma.product.update({
+      where: {
+        id: id,
+      },
+      data: data,
     });
   }
 

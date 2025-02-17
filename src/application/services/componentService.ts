@@ -5,7 +5,7 @@ import { CreateComponentData } from "../../../src/interfaces/dtos/componentDTOs"
 
 export default class ComponentService {
   // composite is the product that will hold the components
-  static async createManyComponents(
+  static async createOrUpdateManyComponents(
     compositeId: string,
     data: Component[]
   ): Promise<void> {

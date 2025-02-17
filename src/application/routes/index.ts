@@ -63,5 +63,11 @@ router.delete(
   authenticateToken,
   ProductController.delete
 );
+router.put(
+  "/products/:id",
+  rateLimiter,
+  authenticateToken,
+  ProductController.update
+);
 
 module.exports = router;

@@ -25,6 +25,7 @@
     "created": "O seu producto foi criado com sucesso, espere pela mensage de sucesso!",
     "all": "Todos os productos",
     "details": "Detalhes do producto",
-    "deleted": "Produto apagado com sucesso!"
+    "deleted": "Produto apagado com sucesso!",
+    "updated": "Atualizado com sucesso!"
   }
 }
