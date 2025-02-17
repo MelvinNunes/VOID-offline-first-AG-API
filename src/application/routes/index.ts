@@ -10,21 +10,40 @@ import {
   RegistrationRequest,
 } from "../../interfaces/request/authenticationRequest";
 import { validateData } from "../middlewares/requestValidationMiddleware";
+import { ProductRequest } from "../../../src/interfaces/request/productRequest";
+import { rateLimiter } from "../middlewares/rateLimiterMiddleware";
 
 const router = express.Router();
 
-router.get("/health", HealthController.checkApiHealth);
-router.post("/login", validateData(LoginRequest), AuthController.login);
+router.get("/health", rateLimiter, HealthController.checkApiHealth);
+router.post(
+  "/login",
+  rateLimiter,
+  validateData(LoginRequest),
+  AuthController.login
+);
 router.post(
   "/register",
+  rateLimiter,
   validateData(RegistrationRequest),
   AuthController.register
 );
 
-router.get("/me", authenticateToken, UserController.getOnlineUser);
-router.get("/users", authenticateToken, UserController.getAllUsers);
+router.get("/me", rateLimiter, authenticateToken, UserController.getOnlineUser);
+router.get(
+  "/users",
+  rateLimiter,
+  authenticateToken,
+  UserController.getAllUsers
+);
 
 // Product Routes
-router.post("/products", authenticateToken, ProductController.create);
+router.post(
+  "/products",
+  rateLimiter,
+  authenticateToken,
+  validateData(ProductRequest),
+  ProductController.create
+);
 
 module.exports = router;

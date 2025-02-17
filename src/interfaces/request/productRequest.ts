@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const ProductRequest = z.object({
+export const ProductRequest = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
