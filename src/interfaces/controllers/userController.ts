@@ -32,7 +32,7 @@ export default class UserController {
     const authUser = req.user;
 
     try {
-      const userVM = await UserServices.getOnlineUser(authUser);
+      const userVM = await UserServices.getOnlineUserProfile(authUser);
       return res
         .status(StatusCodes.OK)
         .json(new ApiResponse<UserVM>(req.t("profile.success"), userVM));

@@ -10,3 +10,17 @@ export interface ProductCreationData {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface Component {
+  productId: string;
+  quantity: number;
+}
+
+export interface ProductRequestData {
+  id: string;
+  name: string;
+  description: string;
+  price?: number;
+  quantity?: number;
+  components?: Component[];
+}

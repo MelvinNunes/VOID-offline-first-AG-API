@@ -59,7 +59,15 @@ export class UserServices {
     });
   }
 
-  static async getOnlineUser(authUser: AuthUser): Promise<UserVM> {
+  static async getCurrentUser(authUser: AuthUser): Promise<UserModel> {
+    const user = await UserRepository.findByEmail(authUser.name);
+    if (!user) {
+      throw new UserWithEmailNotFoundException(authUser.name);
+    }
+    return user;
+  }
+
+  static async getOnlineUserProfile(authUser: AuthUser): Promise<UserVM> {
     const user = await UserRepository.findByEmail(authUser.name);
     if (!user) {
       throw new UserWithEmailNotFoundException(authUser.name);
