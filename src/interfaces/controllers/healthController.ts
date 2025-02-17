@@ -1,6 +1,7 @@
 import { NextFunction, Response } from "express";
 import { RequestWTranslation } from "../../infrastructure/types/index";
 import { ApiResponse } from "../response/apiResponse";
+import { StatusCodes } from "http-status-codes";
 
 export default class HealthController {
   static async checkApiHealth(
@@ -9,7 +10,9 @@ export default class HealthController {
     next: NextFunction
   ) {
     try {
-      return res.json(new ApiResponse<void>(req.t("health"), null));
+      return res.json(
+        new ApiResponse<void>(StatusCodes.OK, req.t("health"), null)
+      );
     } catch (error) {
       next(error);
     }

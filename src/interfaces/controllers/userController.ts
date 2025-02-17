@@ -21,7 +21,9 @@ export default class UserController {
     const data = await UserServices.getAllUsers(start, limit);
     return res
       .status(StatusCodes.OK)
-      .json(new ApiResponse<UserModel[]>(req.t("user.all"), data));
+      .json(
+        new ApiResponse<UserModel[]>(StatusCodes.OK, req.t("user.all"), data)
+      );
   }
 
   static async getOnlineUser(
@@ -35,7 +37,13 @@ export default class UserController {
       const userVM = await UserServices.getOnlineUserProfile(authUser);
       return res
         .status(StatusCodes.OK)
-        .json(new ApiResponse<UserVM>(req.t("profile.success"), userVM));
+        .json(
+          new ApiResponse<UserVM>(
+            StatusCodes.OK,
+            req.t("profile.success"),
+            userVM
+          )
+        );
     } catch (err) {
       next(err);
     }

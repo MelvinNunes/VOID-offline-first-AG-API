@@ -22,6 +22,9 @@
     "not_found": "O perfil não foi encontrado!"
   },
   "product": {
-    "created": "O seu producto foi criado com sucesso, espere pela mensage de sucesso!"
+    "created": "O seu producto foi criado com sucesso, espere pela mensage de sucesso!",
+    "all": "Todos os productos",
+    "details": "Detalhes do producto",
+    "deleted": "Produto apagado com sucesso!"
   }
 }

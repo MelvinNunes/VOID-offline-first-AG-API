@@ -45,5 +45,23 @@ router.post(
   validateData(ProductRequest),
   ProductController.create
 );
+router.get(
+  "/products",
+  rateLimiter,
+  authenticateToken,
+  ProductController.getAll
+);
+router.get(
+  "/products/:id",
+  rateLimiter,
+  authenticateToken,
+  ProductController.details
+);
+router.delete(
+  "/products/:id",
+  rateLimiter,
+  authenticateToken,
+  ProductController.delete
+);
 
 module.exports = router;

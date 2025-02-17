@@ -23,7 +23,12 @@ export default class AuthController {
       return res
         .status(StatusCodes.OK)
         .json(
-          new ApiResponseWithToken<void>(token, req.t("auth.success"), null)
+          new ApiResponseWithToken<void>(
+            StatusCodes.OK,
+            token,
+            req.t("auth.success"),
+            null
+          )
         );
     } catch (err) {
       next(err);
@@ -44,7 +49,12 @@ export default class AuthController {
       return res
         .status(StatusCodes.CREATED)
         .json(
-          new ApiResponseWithToken<void>(token, req.t("user.created"), null)
+          new ApiResponseWithToken<void>(
+            StatusCodes.CREATED,
+            token,
+            req.t("user.created"),
+            null
+          )
         );
     } catch (error) {
       next(error);

@@ -21,6 +21,9 @@
     "not_found": "Profile was not found!"
   },
   "product": {
-    "created": "Your product is being created! Wait for the successfull notification"
+    "created": "Your product is being created! Wait for the successfull notification",
+    "all": "All products",
+    "details": "Details of the product",
+    "deleted": "Product successfully deleted!"
   }
 }

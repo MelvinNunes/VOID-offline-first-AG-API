@@ -70,8 +70,14 @@ export default class ProductService {
     authUser: AuthUser,
     start: number,
     limit: number
-  ) {
-    // const onlineUser = await UserServices.getCurrentUser(authUser);
+  ): Promise<ProductModel[]> {
+    const onlineUser = await UserServices.getCurrentUser(authUser);
+    const products = await ProductRepository.all(
+      start,
+      limit,
+      onlineUser.typesThatCanView()
+    );
+    return products.map((product) => new ProductModel(product));
   }
 
   static async getProductDetails(
@@ -114,7 +120,9 @@ export default class ProductService {
     try {
       await ProductRepository.deleteById(productId);
     } catch (err) {
-      logger.error(``);
+      logger.error(
+        `Error trying to delete the product with id: ${productId}, err: ${err}`
+      );
       throw new InternalServerError();
     }
   }
@@ -148,7 +156,8 @@ export default class ProductService {
 
   private static async calculatePrice(
     productType: $Enums.ProductType,
-    data: ProductRequestData
+    data: ProductRequestData,
+    componentProducts?: ProductModel[]
   ): Promise<number> {
     if (productType === ProductType.SIMPLE) {
       return data.price;
@@ -161,11 +170,13 @@ export default class ProductService {
 
   private static async calculateQuantity(
     productType: $Enums.ProductType,
-    data: ProductRequestData
+    data: ProductRequestData,
+    componentProducts?: ProductModel[]
   ): Promise<number> {
     if (productType === ProductType.SIMPLE) {
       return data.quantity;
     }
+
     return 0; // to be calc
   }
 

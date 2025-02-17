@@ -37,6 +37,13 @@ export class UserModel implements User {
     );
   }
 
+  typesThatCanView() {
+    if (this.role === $Enums.Role.MANAGER) {
+      return [$Enums.ProductType.COMPOSITE, $Enums.ProductType.SIMPLE];
+    }
+    return [$Enums.ProductType.COMPOSITE];
+  }
+
   canUpdateProduct() {
     return this.role === $Enums.Role.MANAGER;
   }

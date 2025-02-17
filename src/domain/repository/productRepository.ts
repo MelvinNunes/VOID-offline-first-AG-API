@@ -1,4 +1,4 @@
-import { PrismaClient, Product } from "@prisma/client";
+import { PrismaClient, Product, ProductType } from "@prisma/client";
 import { ProductCreationData } from "../../../src/interfaces/dtos/productDTO";
 import { ProductModel } from "../models/product";
 
@@ -8,6 +8,22 @@ export class ProductRepository {
   static async create(data: ProductCreationData): Promise<Product> {
     return await prisma.product.create({
       data: data,
+    });
+  }
+
+  static async all(
+    start: number,
+    limit: number,
+    types: ProductType[]
+  ): Promise<Product[]> {
+    return await prisma.product.findMany({
+      where: {
+        type: {
+          in: types,
+        },
+      },
+      take: limit,
+      skip: start,
     });
   }
 
