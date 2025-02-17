@@ -5,6 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import ProductService from "../../../src/application/services/productService";
 import {
   ProductCreateRequestData,
+  ProductFilters,
   ProductUpdateRequestData,
 } from "../dtos/productDTO";
 import { ProductModel } from "../../../src/domain/models/product";
@@ -57,8 +58,22 @@ export default class ProductController {
     const limit = Number.isNaN(Number(req.query.limit))
       ? 10
       : Number(req.query.limit);
+    const searchQuery = req.query.search as string | undefined;
+    const category = req.query.category as string | undefined;
+    const minPrice = Number(req.query.minPrice) || undefined;
+    const maxPrice = Number(req.query.maxPrice) || undefined;
+
+    const filters: ProductFilters = {
+      start,
+      limit,
+      searchQuery,
+      category,
+      maxPrice,
+      minPrice,
+    };
+
     try {
-      const data = await ProductService.getAllProducts(req.user, start, limit);
+      const data = await ProductService.getAllProducts(req.user, filters);
       return res
         .status(StatusCodes.OK)
         .json(

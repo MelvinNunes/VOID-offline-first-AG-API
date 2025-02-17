@@ -1,6 +1,7 @@
 import { PrismaClient, Product, ProductType } from "@prisma/client";
 import {
   ProductCreationData,
+  ProductFilters,
   ProductUpdateData,
 } from "../../../src/interfaces/dtos/productDTO";
 import { ProductModel } from "../models/product";
@@ -32,8 +33,7 @@ export class ProductRepository {
   }
 
   static async all(
-    start: number,
-    limit: number,
+    filters: ProductFilters,
     types: ProductType[]
   ): Promise<Product[]> {
     return await prisma.product.findMany({
@@ -41,12 +41,29 @@ export class ProductRepository {
         type: {
           in: types,
         },
+        ...(filters.searchQuery && {
+          name: {
+            contains: filters.searchQuery,
+            mode: "insensitive",
+          },
+        }),
+        ...(filters.category && {
+          category: {
+            equals: filters.category,
+          },
+        }),
+        ...((filters.minPrice || filters.maxPrice) && {
+          price: {
+            ...(filters.minPrice && { gte: filters.minPrice }),
+            ...(filters.maxPrice && { lte: filters.maxPrice }),
+          },
+        }),
       },
       include: {
         components: true,
       },
-      take: limit,
-      skip: start,
+      take: filters.limit,
+      skip: filters.start,
     });
   }
 

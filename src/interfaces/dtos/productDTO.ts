@@ -44,3 +44,12 @@ export interface ProductUpdateRequestData {
   quantity?: number;
   components?: Component[];
 }
+
+export interface ProductFilters {
+  start: number;
+  limit: number;
+  searchQuery?: string;
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}

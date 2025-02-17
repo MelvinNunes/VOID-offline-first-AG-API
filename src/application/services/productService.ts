@@ -12,6 +12,7 @@ import {
   ProductUpdateRequestData,
   Component,
   ProductUpdateData,
+  ProductFilters,
 } from "../../../src/interfaces/dtos/productDTO";
 import { UserServices } from "./userService";
 import { $Enums, Product, ProductType } from "@prisma/client";
@@ -78,13 +79,11 @@ export default class ProductService {
 
   static async getAllProducts(
     authUser: AuthUser,
-    start: number,
-    limit: number
+    filters: ProductFilters
   ): Promise<ProductModel[]> {
     const onlineUser = await UserServices.getCurrentUser(authUser);
     const products = await ProductRepository.all(
-      start,
-      limit,
+      filters,
       onlineUser.typesThatCanView()
     );
     return products.map((product) => new ProductModel(product));
