@@ -7,10 +7,14 @@ import { UserModel } from "../../../src/domain/models/user";
 
 export default class UserController {
   static async getAllUsers(req: Request, res: Response) {
-    const data = await UserServices.getAllUsers(
-      Number(req.query.start),
-      Number(req.query.limit)
-    ); // we could handle this better, NaN may occur
+    const start = Number.isNaN(Number(req.query.start))
+      ? 0
+      : Number(req.query.start);
+    const limit = Number.isNaN(Number(req.query.limit))
+      ? 10
+      : Number(req.query.limit);
+
+    const data = await UserServices.getAllUsers(start, limit);
     return res
       .status(200)
       .json(new ApiResponse<UserModel[]>("All users", data));
