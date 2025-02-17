@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: "postgres:16.0"
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - ${DATABASE_PORT}:5432
+  api:
+    build: .
+    environment:
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASS: ${DATABASE_PASS}
+      DATABASE_PORT: ${DATABASE_PORT}
+      APP_DOMAIN: ${APP_DOMAIN}
+      EXPOSING_PORT: ${EXPOSING_PORT}
+      DATABASE_URL: postgres://${DATABASE_USER}:${DATABASE_PASS}@postgres-db:5432/${DATABASE_NAME}
+      TOKEN_SECRET: ${TOKEN_SECRET}
+    ports:
+      - ${EXPOSING_PORT}:8000
+    depends_on:
+      - postgres
+volumes:
+  pgdata:
